@@ -107,7 +107,7 @@ public class GroovityScriptViewFactory{
 		return sockets.get(socketName);
 	}
 
-	public WebSocket createSocket(String socketName, Session session) throws InstantiationException, IllegalAccessException, ClassNotFoundException, IllegalArgumentException, InvocationTargetException{
+	public WebSocket createSocket(String socketName, Session session) throws ReflectiveOperationException {
 		GroovityScriptView gsv = sockets.get(socketName);
 		if(gsv!=null){
 			WebSocket ws = gsv.getSocket(session);

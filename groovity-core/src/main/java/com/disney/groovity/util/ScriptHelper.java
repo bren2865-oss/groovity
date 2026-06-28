@@ -135,11 +135,11 @@ public class ScriptHelper implements GroovyObject, GroovityConstants {
 		}
 	}
 	
-	public Object run(final String scriptName) throws InstantiationException, IllegalAccessException, ClassNotFoundException, IOException{
+	public Object run(final String scriptName) throws ReflectiveOperationException, IOException{
 		return groovity.run(scriptName,getBinding());
 	}
 	
-	public Script load(final String scriptName) throws InstantiationException, IllegalAccessException, ClassNotFoundException{
+	public Script load(final String scriptName) throws ReflectiveOperationException {
 		return groovity.load(scriptName, getBinding());
 	}
 	

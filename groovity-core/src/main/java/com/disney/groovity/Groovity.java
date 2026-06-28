@@ -203,10 +203,10 @@ public class Groovity implements GroovityConstants{
 		
 	}
 	
-	protected Script createScript(final String scriptName) throws InstantiationException, IllegalAccessException{
+	protected Script createScript(final String scriptName) throws ReflectiveOperationException {
 		final Class<Script> gsc = getScriptClass(scriptName);
 		if(gsc!=null){
-			Script gs = gsc.newInstance();
+			Script gs = gsc.getDeclaredConstructor().newInstance();
 			return gs;
 		}
 		return null;
@@ -261,7 +261,7 @@ public class Groovity implements GroovityConstants{
 	 * @throws ClassNotFoundException
 	 * @throws IOException
 	 */
-	public Object run(final String scriptName, final Binding binding) throws InstantiationException, IllegalAccessException, ClassNotFoundException, IOException{
+	public Object run(final String scriptName, final Binding binding) throws ReflectiveOperationException, IOException{
 		Script script = load(scriptName,binding);
 		if(script!=null){
 			Object rval = script.run();
@@ -310,7 +310,7 @@ public class Groovity implements GroovityConstants{
 	 * @throws ClassNotFoundException
 	 */
 	@SuppressWarnings("unchecked")
-	public Script load(final String scriptName, final Binding binding) throws InstantiationException, IllegalAccessException, ClassNotFoundException{
+	public Script load(final String scriptName, final Binding binding) throws ReflectiveOperationException {
 		final String varName = GROOVITY_SCRIPT_BINDING_PREFIX.concat(fixCase(scriptName));
 		@SuppressWarnings("rawtypes")
 		final Map variables = binding.getVariables();
@@ -335,7 +335,7 @@ public class Groovity implements GroovityConstants{
 							//whose field loading might depend on the arg binding decorator
 							abd.resolve(variables,argsLookup);
 						}
-						script = gsc.newInstance();
+						script = gsc.getDeclaredConstructor().newInstance();
 						if(script!=null){
 							script.setBinding(binding);
 							variables.put(varName, script);
@@ -995,8 +995,8 @@ public class Groovity implements GroovityConstants{
 			else if (Taggable.class.isAssignableFrom(c)){
 				if(tagLib!=null){
 					try {
-						tagLib.add((Taggable)c.newInstance());
-					} catch (InstantiationException e) {
+						tagLib.add((Taggable)c.getDeclaredConstructor().newInstance());
+					} catch (ReflectiveOperationException e) {
 						log.log(Level.SEVERE,"Could not register GroovyTag "+c.getName(),e);
 					}
 				}

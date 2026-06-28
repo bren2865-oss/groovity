@@ -77,7 +77,7 @@ public class TestExtGroovity {
 		return groovity;
 	}
 	@Test
-	public void testThunderingHerd() throws InterruptedException, InstantiationException, IllegalAccessException, ClassNotFoundException{
+	public void testThunderingHerd() throws InterruptedException, ReflectiveOperationException {
 		Binding binding = new Binding();
 		final Script herdScript = groovity.load("/herd", binding);
 		CountDownLatch latch = new CountDownLatch(2);

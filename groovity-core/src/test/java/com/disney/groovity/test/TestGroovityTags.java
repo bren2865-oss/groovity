@@ -116,11 +116,11 @@ public class TestGroovityTags {
 		groovity.destroy();
 	}
 
-	protected String run(String path) throws InstantiationException, IllegalAccessException, ClassNotFoundException, IOException{
+	protected String run(String path) throws ReflectiveOperationException, IOException{
 		return run(path,new Binding());
 	}
 	
-	protected String run(String path, Binding binding) throws InstantiationException, IllegalAccessException, ClassNotFoundException, IOException{
+	protected String run(String path, Binding binding) throws ReflectiveOperationException, IOException{
 		StringWriter writer = new StringWriter();
 		binding.setVariable("out", writer);
 		groovity.run(path, binding);

@@ -68,7 +68,7 @@ public class PortalSessionAuthorizationFilter implements Filter{
 					Script factory;
 					try {
 						factory = groovity.load("/data/factory", new Binding());
-					} catch (InstantiationException | IllegalAccessException | ClassNotFoundException e) {
+					} catch (ReflectiveOperationException e) {
 						throw new ServletException(e);
 					}
 					Object user = factory.invokeMethod("call", new String[]{"person",userId.toString()});

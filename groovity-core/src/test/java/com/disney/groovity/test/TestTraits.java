@@ -79,7 +79,7 @@ public class TestTraits {
 		Assert.assertEquals(message,result);
 	}
 	
-	protected String run(String path, Binding binding) throws InstantiationException, IllegalAccessException, ClassNotFoundException, IOException{
+	protected String run(String path, Binding binding) throws ReflectiveOperationException, IOException{
 		StringWriter writer = new StringWriter();
 		binding.setVariable("out", writer);
 		groovity.run(path, binding);

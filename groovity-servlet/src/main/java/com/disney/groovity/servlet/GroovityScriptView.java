@@ -426,7 +426,7 @@ public class GroovityScriptView implements AuthConstants{
 		return new Processor(resolved);
 	}
 	
-	public WebSocket getSocket(Session session) throws InstantiationException, IllegalAccessException, ClassNotFoundException, IllegalArgumentException, InvocationTargetException{
+	public WebSocket getSocket(Session session) throws ReflectiveOperationException {
 		WebSocket ws = new WebSocket(session);
 		Binding binding = new Binding();
 		binding.setVariable("socket", ws);

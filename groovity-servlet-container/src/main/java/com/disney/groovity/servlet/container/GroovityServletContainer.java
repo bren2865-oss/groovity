@@ -182,7 +182,7 @@ public class GroovityServletContainer {
 		}
 	}
 	
-	public void run(String path) throws InstantiationException, IllegalAccessException, ClassNotFoundException, IOException{
+	public void run(String path) throws ReflectiveOperationException, IOException{
 		PrintWriter pw = new PrintWriter(System.out);
 		try{
 			pw.println("RUNNING "+path);

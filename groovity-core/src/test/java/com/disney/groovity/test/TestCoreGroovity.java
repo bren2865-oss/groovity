@@ -380,12 +380,12 @@ public class TestCoreGroovity {
 		Assert.assertNull(GroovityObjectConverter.convert("", Date.class));
 	}
 	
-	@Test public void testSchedule() throws InstantiationException, IllegalAccessException, ClassNotFoundException {
+	@Test public void testSchedule() throws ReflectiveOperationException {
 		Script s = groovity.load("/scheduled", new Binding());
 		s.invokeMethod("await", null);
 	}
 
-	protected String run(String path, Binding binding) throws InstantiationException, IllegalAccessException, ClassNotFoundException, IOException{
+	protected String run(String path, Binding binding) throws ReflectiveOperationException, IOException{
 		StringWriter writer = new StringWriter();
 		binding.setVariable("out", writer);
 		groovity.run(path, binding);

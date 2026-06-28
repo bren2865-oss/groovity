@@ -81,7 +81,7 @@ import com.disney.http.auth.keychain.MapKeyChainImpl;
  * @author Alex Vigdor
  */
 public class XmlPolicyParser {
-	public static Verifier parsePolicy(InputSource source, ServletContext servletContext) throws SAXException, ParserConfigurationException, IOException, InstantiationException, IllegalAccessException, ClassNotFoundException, NoSuchAlgorithmException, InvalidKeySpecException, URISyntaxException{
+	public static Verifier parsePolicy(InputSource source, ServletContext servletContext) throws SAXException, ParserConfigurationException, IOException, ReflectiveOperationException, NoSuchAlgorithmException, InvalidKeySpecException, URISyntaxException{
 		DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
 		factory.setValidating(true);
 		factory.setNamespaceAware(false);
@@ -125,7 +125,7 @@ public class XmlPolicyParser {
 		return new VerifierChain(configs);
 	}
 	
-	private static void processCommon(AbstractVerifier config, Element verifier) throws InstantiationException, IllegalAccessException, ClassNotFoundException{
+	private static void processCommon(AbstractVerifier config, Element verifier) throws ReflectiveOperationException {
 		List<AccessController> accessControllers = new ArrayList<AccessController>();
 		NodeList bcnodes = verifier.getChildNodes();
 		for(int j=0;j<bcnodes.getLength();j++){
@@ -139,14 +139,14 @@ public class XmlPolicyParser {
 					accessControllers.add(processAcl(bcel));
 				}
 				else if(bcel.getNodeName().equals("accessController")){
-					accessControllers.add((AccessController) Class.forName(bcel.getAttribute("class")).newInstance());
+					accessControllers.add((AccessController) Class.forName(bcel.getAttribute("class")).getDeclaredConstructor().newInstance());
 				}
 			}
 		}
 		config.setAccessControllers(accessControllers);
 	}
 	
-	private static SignatureVerifierImpl processSignature(Element sig, ServletContext context) throws InstantiationException, IllegalAccessException, ClassNotFoundException, NoSuchAlgorithmException, InvalidKeySpecException, MalformedURLException, URISyntaxException{
+	private static SignatureVerifierImpl processSignature(Element sig, ServletContext context) throws ReflectiveOperationException, NoSuchAlgorithmException, InvalidKeySpecException, MalformedURLException, URISyntaxException{
 		SignatureVerifierImpl config = new SignatureVerifierImpl();
 		List<KeyChain> keyChains = new ArrayList<KeyChain>();
 		processCommon(config, sig);
@@ -234,7 +234,7 @@ public class XmlPolicyParser {
 		return keyMap;
 	}
 	
-	private static DigestVerifierImpl processDigest(Element digest) throws InstantiationException, IllegalAccessException, ClassNotFoundException{
+	private static DigestVerifierImpl processDigest(Element digest) throws ReflectiveOperationException {
 		DigestVerifierImpl config = new DigestVerifierImpl();
 		processCommon(config, digest);
 		ArrayList<PasswordDigester> passwordDigesters= new ArrayList<PasswordDigester>();
@@ -247,7 +247,7 @@ public class XmlPolicyParser {
 					passwordDigesters.add(new MapPasswordDigester(processPasswords(bcel)));
 				}
 				else if(bcel.getNodeName().equals("passwordDigester")){
-					passwordDigesters.add((PasswordDigester) Class.forName(bcel.getAttribute("class")).newInstance());
+					passwordDigesters.add((PasswordDigester) Class.forName(bcel.getAttribute("class")).getDeclaredConstructor().newInstance());
 				}
 				else if(bcel.getNodeName().equals("maxNonceAge")){
 					config.setMaxNonceAge(Long.valueOf(bcel.getTextContent()));
@@ -264,7 +264,7 @@ public class XmlPolicyParser {
 		return config;
 	}
 	
-	private static BasicVerifierImpl processBasic(Element basic) throws InstantiationException, IllegalAccessException, ClassNotFoundException{
+	private static BasicVerifierImpl processBasic(Element basic) throws ReflectiveOperationException {
 		BasicVerifierImpl bc = new BasicVerifierImpl();
 		processCommon(bc, basic);
 		List<PasswordChecker> passwordCheckers = new ArrayList<PasswordChecker>();
@@ -277,7 +277,7 @@ public class XmlPolicyParser {
 					passwordCheckers.add(new MapPasswordChecker(processPasswords(bcel)));
 				}
 				else if(bcel.getNodeName().equals("passwordChecker")){
-					passwordCheckers.add((PasswordChecker) Class.forName(bcel.getAttribute("class")).newInstance());
+					passwordCheckers.add((PasswordChecker) Class.forName(bcel.getAttribute("class")).getDeclaredConstructor().newInstance());
 				}
 			}
 		}
