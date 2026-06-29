@@ -50,7 +50,7 @@ else{
 }
 
 
-private void status(HttpServletRequest request, HttpServletResponse response) throws IOException
+private status(HttpServletRequest request, HttpServletResponse response) throws IOException
 {
 	Map result = new HashMap();
 	if(factory.isCompiling()){
@@ -85,7 +85,7 @@ private void status(HttpServletRequest request, HttpServletResponse response) th
 }
 
 
-private void compile(HttpServletRequest request, HttpServletResponse response) throws IOException
+private compile(HttpServletRequest request, HttpServletResponse response) throws IOException
 {
 	if(factory.isCompiling()){
 		response.sendError(500);

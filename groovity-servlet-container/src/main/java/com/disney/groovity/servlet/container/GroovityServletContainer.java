@@ -48,6 +48,8 @@ import org.eclipse.jetty.server.SslConnectionFactory;
 import org.eclipse.jetty.util.BlockingArrayQueue;
 import org.eclipse.jetty.util.resource.Resource;
 import org.eclipse.jetty.util.ssl.SslContextFactory;
+import org.eclipse.jetty.webapp.Configuration;
+import org.eclipse.jetty.webapp.Configurations;
 import org.eclipse.jetty.webapp.WebAppClassLoader;
 import org.eclipse.jetty.webapp.WebAppContext;
 
@@ -94,13 +96,6 @@ public class GroovityServletContainer {
 		this.revertProperties=revertProperties;
 		server=new Server();
 		
-		org.eclipse.jetty.webapp.Configuration.ClassList classlist = org.eclipse.jetty.webapp.Configuration.ClassList.setServerDefault(server);
-		classlist.addAfter("org.eclipse.jetty.webapp.FragmentConfiguration",
-                "org.eclipse.jetty.plus.webapp.EnvConfiguration",
-                "org.eclipse.jetty.plus.webapp.PlusConfiguration");
-		classlist.addBefore("org.eclipse.jetty.webapp.JettyWebXmlConfiguration",
-				"org.eclipse.jetty.annotations.AnnotationConfiguration");
-		
 		if (port > 0) {
 			HttpConfiguration hc = new HttpConfiguration();
 			hc.setSendServerVersion(false);
@@ -131,7 +126,7 @@ public class GroovityServletContainer {
 		for (URL url : ucl.getURLs()) {
 			File file = new File(url.getFile());
 			if (file.exists()) {
-				context.getMetaData().addWebInfJar(Resource.newResource(file));
+				context.getMetaData().addWebInfResource(Resource.newResource(file));
 				if (url.equals(su)) {
 					hasServlet = true;
 				}

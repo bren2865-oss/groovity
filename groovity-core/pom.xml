@@ -40,13 +40,13 @@
 	</profiles>
 	<dependencies>
 		<dependency>
-			<groupId>org.codehaus.groovy</groupId>
+			<groupId>org.apache.groovy</groupId>
 			<artifactId>groovy-all</artifactId>
 			<version>${groovy.version}</version>
 			<type>pom</type>
 		</dependency>
 		<dependency>
-			<groupId>org.codehaus.groovy</groupId>
+			<groupId>org.apache.groovy</groupId>
 			<artifactId>groovy-dateutil</artifactId>
 			<version>${groovy.version}</version>
 		</dependency>
@@ -76,9 +76,19 @@
 		    <version>2.3.1</version>
 		</dependency>
 		<dependency>
-			<groupId>com.github.tomakehurst</groupId>
+		    <groupId>org.glassfish.jaxb</groupId>
+		    <artifactId>jaxb-runtime</artifactId>
+		    <version>2.3.9</version>
+		</dependency>
+		<dependency>
+		    <groupId>javax.activation</groupId>
+		    <artifactId>javax.activation-api</artifactId>
+		    <version>1.2.0</version>
+		</dependency>
+		<dependency>
+			<groupId>org.wiremock</groupId>
 			<artifactId>wiremock-standalone</artifactId>
-			<version>2.23.2</version>
+			<version>3.6.0</version>
 			<scope>test</scope>
 		</dependency>
 	</dependencies>

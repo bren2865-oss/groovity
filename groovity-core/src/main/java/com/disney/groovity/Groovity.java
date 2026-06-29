@@ -206,8 +206,12 @@ public class Groovity implements GroovityConstants{
 	protected Script createScript(final String scriptName) throws InstantiationException, IllegalAccessException{
 		final Class<Script> gsc = getScriptClass(scriptName);
 		if(gsc!=null){
-			Script gs = gsc.newInstance();
-			return gs;
+			try {
+				Script gs = gsc.getDeclaredConstructor().newInstance();
+				return gs;
+			} catch (NoSuchMethodException | java.lang.reflect.InvocationTargetException e) {
+				throw new InstantiationException(e.getMessage());
+			}
 		}
 		return null;
 	}
@@ -335,7 +339,11 @@ public class Groovity implements GroovityConstants{
 							//whose field loading might depend on the arg binding decorator
 							abd.resolve(variables,argsLookup);
 						}
-						script = gsc.newInstance();
+						try {
+							script = gsc.getDeclaredConstructor().newInstance();
+						} catch (NoSuchMethodException | java.lang.reflect.InvocationTargetException e) {
+							throw new InstantiationException(e.getMessage());
+						}
 						if(script!=null){
 							script.setBinding(binding);
 							variables.put(varName, script);
@@ -995,7 +1003,11 @@ public class Groovity implements GroovityConstants{
 			else if (Taggable.class.isAssignableFrom(c)){
 				if(tagLib!=null){
 					try {
-						tagLib.add((Taggable)c.newInstance());
+						try {
+						tagLib.add((Taggable)c.getDeclaredConstructor().newInstance());
+					} catch (NoSuchMethodException | java.lang.reflect.InvocationTargetException e) {
+						throw new InstantiationException(e.getMessage());
+					}
 					} catch (InstantiationException e) {
 						log.log(Level.SEVERE,"Could not register GroovyTag "+c.getName(),e);
 					}

@@ -70,7 +70,7 @@ public Map<ClusterMember, List<Map>> getCompilerStatus(List<ClusterMember> membe
 }
 
 @Function(info="trigger source compilation")
-public void compile(String userName, Collection<ClusterMember> members, String comment, String[] files){
+public compile(String userName, Collection<ClusterMember> members, String comment, String[] files){
 	members.each{ member ->
 		def compilerUrl = "${getGroovitySystemUrl(member)}/api/compiler?user=${userName}&source=${files.join(',')}&note=${URLEncoder.encode(comment)}";
 		http(method:"POST",url:compilerUrl,async:true,timeout:10,{
@@ -87,7 +87,7 @@ public void compile(String userName, Collection<ClusterMember> members, String c
 }
 
 @Function(info="force compile all")
-public void compileAll(String userName, Collection<ClusterMember> members,String comment){
+public compileAll(String userName, Collection<ClusterMember> members,String comment){
 	members.each{ member ->
 		def compilerUrl = "${getGroovitySystemUrl(member)}/api/compiler?user=${userName}&force=true&source=all&note=${URLEncoder.encode(comment)}";
 		http(method:"POST",url:compilerUrl,async:true,timeout:10,{
@@ -136,7 +136,7 @@ public Map<ClusterMember,Map> getThreads(List<ClusterMember> members){
 	});
 }
 
-public void clearCache(List<ClusterMember> members, String scriptName, String cacheName){
+public clearCache(List<ClusterMember> members, String scriptName, String cacheName){
 	await{
 		members.each{ member ->
 			async{
@@ -146,7 +146,7 @@ public void clearCache(List<ClusterMember> members, String scriptName, String ca
 					handler({
 						if(httpResponse.statusLine.statusCode!=200){
 							log(warn: "Error response for groovity API ${eventsUrl}: ${httpResponse.statusLine}");
-							return null;
+							null
 						}
 						parse(value: httpResponse)
 					})
@@ -206,7 +206,7 @@ def makeApiCall(ClusterMember member, String api){
 		handler({
 			if(httpResponse.statusLine.statusCode!=200){
 				log(warn: "Error response for groovity API ${eventsUrl}: ${httpResponse.statusLine}");
-				return null;
+				null
 			}
 			parse(value: httpResponse)
 		})

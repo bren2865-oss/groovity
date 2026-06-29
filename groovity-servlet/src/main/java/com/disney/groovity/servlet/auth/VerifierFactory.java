@@ -93,7 +93,7 @@ public class VerifierFactory {
 	private GroovityScriptViewFactory viewResolver;
 	
 	@SuppressWarnings("rawtypes")
-	public Verifier createVerifier(List auths, Class<Script> scriptClass) throws InstantiationException, IllegalAccessException, ClassNotFoundException, MalformedURLException, URISyntaxException, NoSuchAlgorithmException, InvalidKeySpecException, CertificateException{
+	public Verifier createVerifier(List auths, Class<Script> scriptClass) throws Exception{
 		ArrayList<Verifier> verifiers = new ArrayList<Verifier>(auths.size());
 		for(Object auth:auths){
 			if(auth instanceof Map){
@@ -156,7 +156,7 @@ public class VerifierFactory {
 	}
 	
 	@SuppressWarnings({ "rawtypes", "unchecked" })
-	private void processCommon(AbstractVerifier verifier, Map map, Class scriptClass) throws InstantiationException, IllegalAccessException, ClassNotFoundException{
+	private void processCommon(AbstractVerifier verifier, Map map, Class scriptClass) throws Exception{
 		List<AccessController> accessControllers = new ArrayList<AccessController>();
 		String realm = resolve(map,"realm",String.class);
 		if(realm!=null){
@@ -179,7 +179,7 @@ public class VerifierFactory {
 		verifier.setAccessControllers(accessControllers);
 	}
 
-	private void addKeychain(Object keychain, List<KeyChain> keychains, Class<Script> scriptClass) throws InstantiationException, IllegalAccessException, ClassNotFoundException {
+	private void addKeychain(Object keychain, List<KeyChain> keychains, Class<Script> scriptClass) throws Exception {
 		if (keychain instanceof CharSequence) {
 			keychains.add((KeyChain) fallbackConstruct(keychain, scriptClass));
 		} else if (keychain instanceof Closure) {
@@ -240,7 +240,7 @@ public class VerifierFactory {
 		}
 	}
 	@SuppressWarnings({ "unchecked", "rawtypes" })
-	private SignatureVerifierImpl processSignature(Map signature, Class<Script> scriptClass) throws InstantiationException, IllegalAccessException, ClassNotFoundException, MalformedURLException, URISyntaxException, NoSuchAlgorithmException, InvalidKeySpecException, CertificateException{
+	private SignatureVerifierImpl processSignature(Map signature, Class<Script> scriptClass) throws Exception{
 		SignatureVerifierImpl verifier = new SignatureVerifierImpl();
 		processCommon(verifier, signature, scriptClass);
 		List<KeyChain> keyChains = new ArrayList<KeyChain>();
@@ -376,7 +376,7 @@ public class VerifierFactory {
 		return new KeyStoreKeyChainImpl(parcel, passwd);
 	}
 	
-	private PolicyVerifierImpl processPolicy(@SuppressWarnings("rawtypes") final Map policy, Class<Script> scriptClass) throws MalformedURLException, URISyntaxException, InstantiationException, IllegalAccessException, ClassNotFoundException{
+	private PolicyVerifierImpl processPolicy(@SuppressWarnings("rawtypes") final Map policy, Class<Script> scriptClass) throws Exception{
 		PolicyVerifierImpl verifier = new PolicyVerifierImpl();
 		processCommon(verifier, policy, scriptClass);
 		verifier.setPolicyLoader(new Callable<Verifier>() {
@@ -421,7 +421,7 @@ public class VerifierFactory {
 		return verifier;
 	}
 	
-	private void addPasswordChecker(Object passwordChecker, List<PasswordChecker> passwordCheckers, Class<Script> scriptClass) throws InstantiationException, IllegalAccessException, ClassNotFoundException{
+	private void addPasswordChecker(Object passwordChecker, List<PasswordChecker> passwordCheckers, Class<Script> scriptClass) throws Exception{
 		if(passwordChecker instanceof CharSequence){
 			passwordCheckers.add((PasswordChecker)fallbackConstruct(passwordChecker, scriptClass));
 		}
@@ -437,7 +437,7 @@ public class VerifierFactory {
 	}
 	
 	@SuppressWarnings({ "rawtypes", "unchecked" })
-	private BasicVerifierImpl processBasic(Map basic, Class scriptClass) throws InstantiationException, IllegalAccessException, ClassNotFoundException{
+	private BasicVerifierImpl processBasic(Map basic, Class scriptClass) throws Exception{
 		BasicVerifierImpl verifier = new BasicVerifierImpl();
 		processCommon(verifier, basic, scriptClass);
 		List<PasswordChecker> passwordCheckers = new ArrayList<PasswordChecker>();
@@ -457,17 +457,17 @@ public class VerifierFactory {
 		return verifier;
 	}
 	
-	private Object fallbackConstruct(Object className, Class<Script> scriptClass) throws InstantiationException, IllegalAccessException, ClassNotFoundException{
+	private Object fallbackConstruct(Object className, Class<Script> scriptClass) throws Exception{
 		try{
-			return Class.forName(className.toString()).newInstance();
+			return Class.forName(className.toString()).getDeclaredConstructor().newInstance();
 		}
 		catch(ClassNotFoundException ce){
-			 return Class.forName(className.toString(),true,scriptClass.getClassLoader()).newInstance();
+			 return Class.forName(className.toString(),true,scriptClass.getClassLoader()).getDeclaredConstructor().newInstance();
 		}
 	}
 	
 	@SuppressWarnings("rawtypes")
-	private void addDigester(Object passwordDigester, List<PasswordDigester> passwordDigesters, Class<Script> scriptClass) throws InstantiationException, IllegalAccessException, ClassNotFoundException{
+	private void addDigester(Object passwordDigester, List<PasswordDigester> passwordDigesters, Class<Script> scriptClass) throws Exception{
 		if(passwordDigester instanceof CharSequence){
 			passwordDigesters.add((PasswordDigester) fallbackConstruct(passwordDigester, scriptClass));
 		}
@@ -483,7 +483,7 @@ public class VerifierFactory {
 	}
 	
 	@SuppressWarnings("rawtypes")
-	private void addAccessController(Object accessController, List<AccessController> accessControllers, Class<Script> scriptClass) throws InstantiationException, IllegalAccessException, ClassNotFoundException{
+	private void addAccessController(Object accessController, List<AccessController> accessControllers, Class<Script> scriptClass) throws Exception{
 		if(accessController instanceof CharSequence){
 			accessControllers.add((AccessController)fallbackConstruct(accessController, scriptClass));
 		}
@@ -498,7 +498,7 @@ public class VerifierFactory {
 	}
 	
 	@SuppressWarnings({ "rawtypes", "unchecked" })
-	private DigestVerifierImpl processDigest(Map digest, Class<Script> scriptClass) throws InstantiationException, IllegalAccessException, ClassNotFoundException{
+	private DigestVerifierImpl processDigest(Map digest, Class<Script> scriptClass) throws Exception{
 		DigestVerifierImpl verifier = new DigestVerifierImpl();
 		processCommon(verifier, digest, scriptClass);
 		ArrayList<PasswordDigester> passwordDigesters= new ArrayList<PasswordDigester>();

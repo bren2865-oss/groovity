@@ -397,7 +397,7 @@ public class StatsASTTransformation implements ASTTransformation, Opcodes, Groov
 					}
 				});
 				Statement code = method.getCode();
-				if(method.getReturnType()!=null && method.getReturnType()!=ClassHelper.VOID_TYPE){
+				if(method.getReturnType()!=null && !"void".equals(method.getReturnType().getName())){
 					code = createImplicitReturn(code);
 				}
 				method.setCode(new BlockStatement(new Statement[] {startStats,new TryCatchStatement(code,endStats)},method.getVariableScope()));

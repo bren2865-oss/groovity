@@ -182,8 +182,8 @@ public class GroovityServlet extends HttpServlet implements Servlet {
 		return param;
 	}
 
-	private Object loadInstance(String className) throws InstantiationException, IllegalAccessException, ClassNotFoundException {
-		return Class.forName(className, true, getServletContext().getClassLoader()).newInstance();
+	private Object loadInstance(String className) throws Exception {
+		return Class.forName(className, true, getServletContext().getClassLoader()).getDeclaredConstructor().newInstance();
 	}
 
 	private static boolean isNotBlank(String str) {

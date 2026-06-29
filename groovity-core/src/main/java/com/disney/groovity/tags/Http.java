@@ -26,7 +26,7 @@ package com.disney.groovity.tags;
 import groovy.lang.Binding;
 import groovy.lang.Closure;
 import groovy.lang.Writable;
-import groovy.util.slurpersupport.GPathResult;
+import groovy.xml.slurpersupport.GPathResult;
 import groovy.xml.XmlUtil;
 
 import java.io.CharArrayWriter;
@@ -264,7 +264,7 @@ public class Http implements Taggable {
 		Object target = resolve(attributes,"to");
 		if(target instanceof Class) {
 			if(!Object.class.equals(target)) {
-				target = ((Class)target).newInstance();
+				target = ((Class)target).getDeclaredConstructor().newInstance();
 			}
 		}
 		if(target == null) {
