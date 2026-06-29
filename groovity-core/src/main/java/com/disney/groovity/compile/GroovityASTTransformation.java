@@ -551,7 +551,7 @@ public class GroovityASTTransformation implements ASTTransformation, Opcodes, Gr
 		
 		public void visitMethod(MethodNode node){
 			if(!node.isStatic() && node.getName().equals(LOAD) && node.getParameters().length==0){
-				if(node.getReturnType()==ClassHelper.VOID_TYPE){
+				if("void".equals(node.getReturnType().getName())){
 					node.setReturnType(ClassHelper.OBJECT_TYPE);
 				}
 				this.loadMethod=node;
