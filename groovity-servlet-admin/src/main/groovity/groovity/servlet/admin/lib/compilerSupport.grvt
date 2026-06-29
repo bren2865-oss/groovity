@@ -146,7 +146,7 @@ public clearCache(List<ClusterMember> members, String scriptName, String cacheNa
 					handler({
 						if(httpResponse.statusLine.statusCode!=200){
 							log(warn: "Error response for groovity API ${eventsUrl}: ${httpResponse.statusLine}");
-							null
+							return null
 						}
 						parse(value: httpResponse)
 					})
@@ -206,7 +206,7 @@ def makeApiCall(ClusterMember member, String api){
 		handler({
 			if(httpResponse.statusLine.statusCode!=200){
 				log(warn: "Error response for groovity API ${eventsUrl}: ${httpResponse.statusLine}");
-				null
+				return null
 			}
 			parse(value: httpResponse)
 		})

@@ -1009,9 +1009,16 @@ public class Groovity implements GroovityConstants{
 					try {
 						try {
 						tagLib.add((Taggable)c.getDeclaredConstructor().newInstance());
-					} catch (NoSuchMethodException | java.lang.reflect.InvocationTargetException e) {
-						InstantiationException ie = new InstantiationException(e.getCause() != null ? e.getCause().getMessage() : e.getMessage());
-						ie.initCause(e.getCause() != null ? e.getCause() : e);
+					} catch (NoSuchMethodException e) {
+						InstantiationException ie = new InstantiationException(e.getMessage());
+						ie.initCause(e);
+						throw ie;
+					} catch (java.lang.reflect.InvocationTargetException e) {
+						Throwable cause = e.getCause();
+						if (cause instanceof RuntimeException) throw (RuntimeException) cause;
+						if (cause instanceof Error) throw (Error) cause;
+						InstantiationException ie = new InstantiationException(cause != null ? cause.getMessage() : e.getMessage());
+						ie.initCause(cause != null ? cause : e);
 						throw ie;
 					}
 					} catch (InstantiationException e) {
