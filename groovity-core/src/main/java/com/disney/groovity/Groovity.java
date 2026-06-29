@@ -210,7 +210,9 @@ public class Groovity implements GroovityConstants{
 				Script gs = gsc.getDeclaredConstructor().newInstance();
 				return gs;
 			} catch (NoSuchMethodException | java.lang.reflect.InvocationTargetException e) {
-				throw new InstantiationException(e.getMessage());
+				InstantiationException ie = new InstantiationException(e.getCause() != null ? e.getCause().getMessage() : e.getMessage());
+				ie.initCause(e.getCause() != null ? e.getCause() : e);
+				throw ie;
 			}
 		}
 		return null;
@@ -342,7 +344,9 @@ public class Groovity implements GroovityConstants{
 						try {
 							script = gsc.getDeclaredConstructor().newInstance();
 						} catch (NoSuchMethodException | java.lang.reflect.InvocationTargetException e) {
-							throw new InstantiationException(e.getMessage());
+							InstantiationException ie = new InstantiationException(e.getCause() != null ? e.getCause().getMessage() : e.getMessage());
+							ie.initCause(e.getCause() != null ? e.getCause() : e);
+							throw ie;
 						}
 						if(script!=null){
 							script.setBinding(binding);
@@ -1006,7 +1010,9 @@ public class Groovity implements GroovityConstants{
 						try {
 						tagLib.add((Taggable)c.getDeclaredConstructor().newInstance());
 					} catch (NoSuchMethodException | java.lang.reflect.InvocationTargetException e) {
-						throw new InstantiationException(e.getMessage());
+						InstantiationException ie = new InstantiationException(e.getCause() != null ? e.getCause().getMessage() : e.getMessage());
+						ie.initCause(e.getCause() != null ? e.getCause() : e);
+						throw ie;
 					}
 					} catch (InstantiationException e) {
 						log.log(Level.SEVERE,"Could not register GroovyTag "+c.getName(),e);
